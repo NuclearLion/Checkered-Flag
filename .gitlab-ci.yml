@@ -26,6 +26,6 @@ build:
 checker:
     stage: test
     image:
-        name: gitlab.cs.pub.ro:5050/vmchecker/tema3-2023
+        name: gitlab.cs.pub.ro:5050/iocla/tema3-2023
     script:
-        - echo ""
+        - ./checker/checker.sh
