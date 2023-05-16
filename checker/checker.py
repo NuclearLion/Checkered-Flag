@@ -41,6 +41,8 @@ header = "======================= Tema 3 PCLP2 =======================\n"
 def test_task(taskNo):
     global points
 
+    
+
     taskString = f"{taskDir}{taskNo}/"
     procString = runExec + taskString + checker
     rc = subprocess.call(f"make -C {taskString} > /dev/null 2> /dev/null", shell=useShell)
@@ -94,7 +96,7 @@ if args.zip:
 
 print("\n" + header)
 
-points = 0
+points = 10
 
 #================================ TESTS ================================#
 
