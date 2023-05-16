@@ -57,7 +57,7 @@ void write_out(int test_no, char *out)
 void run_tests(int test_num, int silent_testing)
 {
     float score = 0.0f;
-    float score_per_test = 25.0f / test_num;
+    float score_per_test = 20.0f / test_num;
 
     int filler_size = (50 - strlen("PWD") - 1 - 2) / 2;
     int delim_size = 50 - strlen("Test 00XXXXXX: 0.00");
