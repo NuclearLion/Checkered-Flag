@@ -86,8 +86,8 @@ void run_tests(int test_num, int silent_testing)
 
         write_out(i, res, n);
 
-        for (int i = 0; i < n; i++) {
-            if (strcmp(res[i], ref[i])) {
+        for (int j = 0; j < n; j++) {
+            if (strcmp(res[j], ref[j])) {
                 printf("Test %02d%.*sFAILED: %.2f\n", i, delim_size, delim, 0.0);
                 passed = 0;
                 break;

@@ -9,9 +9,7 @@ section .text
 ;	in ordine inversa. Consoanele raman nemodificate.
 ;	Modificare se va face in-place
 reverse_vowels:
-	enter 0, 0
 
 
 
-	leave
 	ret
