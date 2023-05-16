@@ -86,7 +86,7 @@ void run_tests(int test_num, int silent_testing)
             printf("Test %02d%.*sFAILED: %.2f\n", i, delim_size, delim, 0.0);
         }
     }
-    printf("\nTASK 2 SCORE: %.2f / 25.00\n", score);
+    printf("\nTASK 2 SCORE: %.2f / 20.00\n", score);
 }
 
 int main(int argc, char **argv)
