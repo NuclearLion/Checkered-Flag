@@ -28,8 +28,8 @@ bonusNo = 6
 
 runExec = "./"
 checker = "checker"
-taskDir = "task-"
-bonusDir = "bonus-"
+taskDir = "../src/task-"
+bonusDir = "../src/bonus-"
 
 zipName = "VMChecker_Homework_3"
 
