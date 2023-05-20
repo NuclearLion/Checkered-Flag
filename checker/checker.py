@@ -24,12 +24,12 @@ if len(sys.argv) == 1:
 #============================== CONSTANTS ==============================#
 
 tasksNo = 4
-bonusNo = 4
+bonusNo = 6
 
 runExec = "./"
 checker = "checker"
-taskDir = "../src/task-"
-bonusDir = "../src/bonus/"
+taskDir = "task-"
+bonusDir = "bonus-"
 
 zipName = "VMChecker_Homework_3"
 
@@ -40,8 +40,6 @@ header = "======================= Tema 3 PCLP2 =======================\n"
 
 def test_task(taskNo):
     global points
-
-    
 
     taskString = f"{taskDir}{taskNo}/"
     procString = runExec + taskString + checker
@@ -69,7 +67,7 @@ def test_bonus(bonusNo):
     
     bonusString = f"{bonusDir}{bonusNo}/"
     procString = runExec + bonusString + checker
-    rc = subprocess.call(f"make -C {bonusDir} > /dev/null 2> /dev/null", shell=useShell)
+    rc = subprocess.call(f"make -C {bonusString} > /dev/null 2> /dev/null", shell=useShell)
 
     if rc != 0:
         sys.stderr.write("make failed with status %d\n" % rc)
@@ -79,19 +77,22 @@ def test_bonus(bonusNo):
         sys.stderr.write("The file %s is missing and could not be created with \'make\'" % (bonusDir + checker))
         return
 
-    checkerOutput = str(subprocess.check_output(f"cd {bonusDir} && ./checker", shell=useShell), encoding='utf-8')
+    if bonusNo == 6:
+        checkerOutput = str(subprocess.check_output(f"cd {bonusString} && bash check.sh", shell=useShell), encoding='utf-8')
+    else:
+        checkerOutput = str(subprocess.check_output(f"cd {bonusString} && ./checker", shell=useShell), encoding='utf-8')
 
     print(checkerOutput)
-    taskScore = re.findall(r'\d+\.\d+', re.findall(fr'BONUS SCORE: \d+\.\d+', checkerOutput)[0])[0]
+    taskScore = re.findall(r'\d+\.\d+', re.findall(fr'BONUS {bonusNo} SCORE: \d+\.\d+', checkerOutput)[0])[0]
 
     points += float(taskScore)
 
-    rc = subprocess.call(f"make -C {bonusDir} clean > /dev/null 2> /dev/null", shell=useShell)
+    rc = subprocess.call(f"make -C {bonusString} clean > /dev/null 2> /dev/null", shell=useShell)
 
 #=======================================================================#
 
 if args.zip:
-    rc = subprocess.call(f"cd ../src/; zip -r {zipName} */*.asm", shell=useShell)
+    rc = subprocess.call(f" zip -r {zipName} */*.asm ", shell=useShell)
     exit(rc)
 
 print("\n" + header)
@@ -103,12 +104,13 @@ points = 10
 if args.task == None and args.all:
     for task in range(1, tasksNo + 1):
         test_task(task)
-    # for bonus in range(1, bonusNo + 1):
-    #     test_bonus(bonus)
+    for bonus in range(1, bonusNo + 1):
+        test_bonus(bonus)
 elif args.task != None:
     test_task(re.findall(r'\d', args.task)[0])
-# elif args.bonus != None:
-#     test_bonus(re.findall(r'\d', args.bonus)[0])
+elif args.bonus != None:
+    test_bonus(re.findall(r'\d', args.bonus)[0])
+
 
 
 print(f"====================== TOTAL POINTS ======================\n")
