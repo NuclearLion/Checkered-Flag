@@ -1,4 +1,4 @@
-# Task Bonus - Assembly 64bit
+# Task Bonus - AT&T
 
 Task-ul implementarea unei functii care aduna 2 vectori de dimensiune `n`, apoi scade din vectorul rezultat 3 numere, definite prin `#define` (`*_VALUE`), in `positions.h`, de pe pozitiile indicate tot in `positions.h` (`*_POSITION`), in assembly pe 32 de biti, folosind sintaxa AT&T.
 \Pozitiile trebuie scalate cu dimensiunea vectorului, ele fiind definite pentru un vector de dimensiune 10.
