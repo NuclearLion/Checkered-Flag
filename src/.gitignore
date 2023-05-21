@@ -1,5 +1,5 @@
 */out/*
 */checker
-*/.o
+*/*.o
 
 !*/out/.dummy
