@@ -82,7 +82,7 @@ def test_bonus(bonusNo):
         if hasAVX == "avx2":
             checkerOutput = str(subprocess.check_output(f"cd {bonusString} && ./checker", shell=useShell), encoding='utf-8')
         else:
-            checkerOutput = "AVX missing, manual verification required"
+            print("WARNING: AVX missing, manual verification required for bonus task 4")
             return
     elif bonusNo == 6:
         checkerOutput = str(subprocess.check_output(f"cd {bonusString} && bash check.sh", shell=useShell), encoding='utf-8')
