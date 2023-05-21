@@ -7,8 +7,8 @@ section .text
 ;  and intertwine them
 ;  The resulting array is stored in v
 intertwine:
-	push	ebp
-	mov 	ebp, esp
+	push	rbp
+	mov 	rbp, rsp
 
 	leave
 	ret
