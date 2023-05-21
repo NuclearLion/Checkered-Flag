@@ -82,7 +82,8 @@ def test_bonus(bonusNo):
         if hasAVX == "avx2":
             checkerOutput = str(subprocess.check_output(f"cd {bonusString} && ./checker", shell=useShell), encoding='utf-8')
         else:
-            checkerOutput = str(subprocess.check_output(f"cd {bonusString} && qemu-x86_64 -cpu max,+avx2 ./checker", shell=useShell), encoding='utf-8')
+            checkerOutput = "AVX missing, manual verification required"
+            return
     elif bonusNo == 6:
         checkerOutput = str(subprocess.check_output(f"cd {bonusString} && bash check.sh", shell=useShell), encoding='utf-8')
     else:
