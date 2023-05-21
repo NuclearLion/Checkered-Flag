@@ -85,7 +85,7 @@ static void run_tests(int test_num)
 		fclose(out);
 
 		char command[MAX_COMMAND];
-		snprintf(command, MAX_COMMAND, "diff %s %s > /dev/null", ref_file_name, out_file_name);
+		snprintf(command, MAX_COMMAND, "diff %s %s ", ref_file_name, out_file_name);
 
         if (system(command) == 0)
 		{
