@@ -14,8 +14,8 @@
  */
 
 add_vect:
-	pushl 	%ebp
-	movl	%esp, %ebp
+	pushl	%ebp
+	movl 	%esp, %ebp
 
 	leave
 	ret

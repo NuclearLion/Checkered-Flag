@@ -9,7 +9,7 @@ section .text
 
 vectorial_ops:
 	push	rbp
-	mov		rbp, rsp
+	mov 	rbp, rsp
 
 	leave
 	ret

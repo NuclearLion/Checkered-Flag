@@ -3,10 +3,10 @@ section .text
 
 get_rand:
 	push	ebp
-	mov		ebp, esp
+	mov 	ebp, esp
 
 rdrand_here:
-	xor		eax, eax ; delete me
+	xor 	eax, eax ; delete me
 
 	leave
 	ret

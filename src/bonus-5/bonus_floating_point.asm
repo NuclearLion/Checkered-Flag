@@ -5,7 +5,7 @@ section .text
 ;  returns x * sqrt(2) + y * sin(z * PI * 1/e)
 do_math:
 	push	ebp
-	mov	ebp, esp
+	mov 	ebp, esp
 
 	leave
 	ret

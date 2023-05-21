@@ -17,7 +17,7 @@ section .text
 
 replace_marco:
 	push	ebp
-	mov		ebp, esp
+	mov 	ebp, esp
 
 	leave
 	ret
