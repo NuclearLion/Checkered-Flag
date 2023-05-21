@@ -49,7 +49,7 @@ Pentru a afla ce capabilitati are procesorul vostru, folositi comanda `cat /proc
 
 - Se garanteaza ca rezultatul oricarei inmultiri incape intr-un int (32 de biti).
 
-- Daca folositi AVX pentru rezolvarea temei, veti primi 0 puncte pe VMchecker, pentru ca masina pe care ruleaza checker-ul nu are suport pentru AVX.
+- Daca folositi AVX-512 pentru rezolvarea temei, veti primi 0 puncte pe VMchecker, pentru ca masina pe care ruleaza checker-ul nu are suport pentru AVX.
 Mentionati in comentarii sau in README faptul ca ati folosit AVX, sa stim ca e nevoie de verificare manuala.
 
 ## Punctare
