@@ -3,6 +3,10 @@ global compare_func
 global sort
 
 section .text
+	extern strtok
+
+section .data
+	delimiters db ' ,.',10,0  
 
 ;; sort(char **words, int number_of_words, int size)
 ;  functia va trebui sa apeleze qsort pentru soratrea cuvintelor 
@@ -17,5 +21,15 @@ sort:
 ;  number_of_words reprezinta numarul de cuvinte
 get_words:
     enter 0, 0
+
+	mov edi, [ebp + 8] ; edi = s
+	mov esi, [ebp + 12] ; esi = words
+	mov ecx, [ebp + 16] ; ecx = number_of_words
+
+	; loop s to find words
+
+
+
+
     leave
     ret
