@@ -70,7 +70,7 @@ void run_tests(int test_num, int silent_testing)
         input[i] = malloc(100);
     }
 
-    for (size_t i = 0; i < test_num; i++) {
+    for (size_t i = 0; i < test_num; i++) { //TODO: change to test_num
         memset(res, 0, 10000);
         int n = read_input(i, input);
         read_ref(i, ref);

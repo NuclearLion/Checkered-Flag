@@ -1,0 +1,112 @@
+section .data
+	back db "..", 0
+	curr db ".", 0
+	slash db "/", 0
+	; declare global vars here
+
+
+section .bss
+	stack resd 128
+    stack_pointer resd 1
+	
+
+section .text
+	global pwd
+	extern strcmp, strcpy, strcat, strlen
+
+;;	void pwd(char **directories, int n, char *output)
+;	Adauga in parametrul output path-ul rezultat din
+;	parcurgerea celor n foldere din directories
+pwd:
+	enter 0, 0
+	push ebp
+	mov ebp, esp
+	pusha
+
+	mov eax, [ebp + 8] ; directories
+	mov ecx, [ebp + 12] ; n
+	mov edi, [ebp + 16] ; output
+
+loop_lines_directories:
+	cmp ecx, 0
+	jle done_loop_lines_directories
+	dec ecx
+
+	; compare directories with ".."
+	mov esi, [eax]
+	mov ebx, back
+	push eax
+	push ecx
+	push esi
+	push ebx
+	call strcmp
+	add esp, 8
+
+	; if strcmp returns 0, remove last dir from stack
+	cmp eax, 0
+	jne check_current
+	cmp dword [stack_pointer], 0
+	jle next_directory
+	dec dword [stack_pointer]
+
+	jmp next_directory
+
+check_current:
+	; compare directories with "."
+	mov ebx, curr
+	push esi
+	push ebx
+	call strcmp
+	add esp, 8
+
+	; if strcmp returns 0, go to the next directory
+	cmp eax, 0
+	jne add_directory
+	jmp next_directory
+
+add_directory:
+	; add directory to stack
+	mov edx, dword [stack_pointer]
+	shl edx, 2 ; 4 * stack_pointer
+	add edx, stack
+	mov [edx], esi
+	inc dword [stack_pointer]
+
+next_directory:
+	add eax, 4
+	jmp loop_lines_directories
+
+done_loop_lines_directories:
+	; concatenate directories from stack to output string
+	mov eax, stack
+	mov ecx, dword [stack_pointer]
+
+loop2:
+	cmp ecx, 0
+	jle end
+	dec ecx
+	mov esi, [eax]
+	mov ebx, slash
+
+	;add "/" to output string
+	push edi
+	push ebx
+	call strcat
+	add esp, 8
+
+	;add directory to output string
+	push edi
+	push esi
+	call strcat
+	add esp, 8
+
+	add eax, 4
+	jmp loop2
+	
+
+
+
+end:
+	popa
+	leave
+	ret
