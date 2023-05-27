@@ -59,7 +59,7 @@ void run_tests(int test_num, int silent_testing)
 
     printf("%.*sREVERSE VOWELS%.*s\n\n", filler_size, filler, filler_size, filler);
 
-    for (size_t i = 0; i < test_num; i++) {
+    for (size_t i = 0; i < test_num; i++) { //TODO change to test_num
         char *input = malloc(2e6);
         char *ref = malloc(2e6);
         read_input(i, input);
