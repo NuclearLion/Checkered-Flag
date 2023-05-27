@@ -1,0 +1,7 @@
+; loop s to find words using strtok from C
+	; save words in words with \n at the end
+
+	; Set up the arguments for the first call to strtok
+
+
+

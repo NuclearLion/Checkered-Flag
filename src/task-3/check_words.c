@@ -76,7 +76,7 @@ void run_tests(int test_num, int silent_testing)
         ref[i] = calloc(1, 100);
     }
 
-    for (size_t i = 0; i < test_num; i++) {
+    for (size_t i = 0; i < test_num; i++) { //TODO change to test_num
         int passed = 1;
         int n = read_input(i, input);
         read_ref(i, ref, n);
