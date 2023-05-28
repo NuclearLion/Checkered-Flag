@@ -8,18 +8,47 @@ section .data
 	delimiters db ' ,.', 10, 0
 	endl db 10, 0
 	word_cnt dd 0
-	sep_zero db 0
+;;;debug zone;;;
+	format db "%s", 0
 
 section .text
 	extern strtok
 	extern printf
 	extern strcat
 	extern qsort
+	extern strlen
+	extern strcmp
 ;; sort(char **words, int number_of_words, int size)
 ;  functia va trebui sa apeleze qsort pentru soratrea cuvintelor 
 ;  dupa lungime si apoi lexicografix
 sort:
     enter 0, 0
+
+; 	mov eax, [ebp + 8] ; words
+; 	mov ebx, [ebp + 12] ; number_of_words
+; 	mov ecx, [ebp + 16] ; size
+; 	mov edx, compare_func
+
+; 	push edx
+; 	push ecx
+; 	push ebx
+; 	push eax
+
+; 	call qsort
+; 	add esp, 16
+
+; 	mov ecx, [ebp + 12] ; number_of_words
+; 	mov esi, [ebp + 8] ; words
+; print_loop:
+;     cmp ecx, 0
+;     jle end_print_loop
+;     dec ecx
+;     mov eax, [esi]
+;     PRINTF32 `Word: %s\n\x0`, eax
+;     add esi, 4
+;     jmp print_loop
+; end_print_loop:
+
     leave
     ret
 
@@ -30,14 +59,14 @@ get_words:
     enter 0, 0
 	pusha
 
-	mov esi, [ebp + 12] ; words
-	mov ecx, [ebp + 16] ; number_of_words
+; 	mov esi, [ebp + 12] ; words
+; 	mov ecx, [ebp + 16] ; number_of_words
 
-clear_array:
-	mov edi, [esi]
-	mov byte [edi], 0
-	add esi, 4
-	loop clear_array
+; clear_array:
+; 	mov edi, [esi]
+; 	mov byte [edi], 0
+; 	add esi, 4
+; 	loop clear_array
 
 	mov edi, [ebp + 8] ; s
 	mov esi, [ebp + 12] ; words
@@ -52,18 +81,7 @@ clear_array:
 	call strtok ; strtok(s, delimiters)
 	add esp, 8
 
-	; mov esi, eax ; words[0] = strtok(s, delimiters)
-	push eax
-	push dword [esi]
-	call strcat
-	add esp, 8
-
-	mov edx, endl ; edx = \n
-
-	push edx ; src
-	push dword [esi] ; dest
-	call strcat ; strcat(words[0], \n)
-	add esp, 8
+	mov [esi], eax ; words[0] = strtok(s, delimiters)
 
 process_tokens: 
 	dec dword [word_cnt] ; word_cnt--
@@ -78,17 +96,8 @@ process_tokens:
 
 	mov ebx, eax ; save eax in ebx
 
-	push eax ; src
-	push dword [esi] ; dest
-	call strcat ; concatenate last word from string in the words array
-	add esp, 8 
-
-	mov edx, endl ; edx = \n
-
-	push edx ; src
-	push dword [esi] ; dest
-	call strcat ; strcat(words[i], \n)
-	add esp, 8
+	add esi, 4
+	mov [esi], eax
 
 	mov eax, ebx ; restore eax
 	jmp process_tokens ; repeat
@@ -98,3 +107,56 @@ end_process_tokens:
 	popa
     leave
     ret
+
+compare_func:
+	push ebp
+	mov ebp, esp
+	pusha
+
+	; load string pointers
+	mov eax, [ebp + 8] ; a
+	mov ebx, [ebp + 12] ; b
+
+	; get len of strA
+	push eax
+	call strlen
+	add esp, 4
+	mov ecx, eax
+
+	; get len of strB
+	push eax
+	call strlen
+	add esp, 4
+	mov edx, eax
+
+	; compare lenA and lenB
+	cmp ecx, edx
+	jg lenA_greater
+	jl lenB_greater
+
+	; lenA == lenB, cmp lexicographically
+	mov eax, [ebp + 8] ; a
+	mov eax, [eax]
+	push eax
+
+	mov eax, [ebp + 12] ; b
+	mov eax, [eax]
+	push eax
+
+	call strcmp
+	add esp, 8
+
+	; restore stack and return
+end_compare:
+	popa
+	leave
+	ret
+
+lenA_greater:
+	mov eax, 1
+	jmp end_compare
+
+lenB_greater:
+	mov eax, -1
+	jmp end_compare
+
