@@ -441,3 +441,40 @@ lenB_greater:
 	mov eax, -1
 	jmp end_compare
 
+
+
+
+
+
+
+
+
+
+
+; 	mov esi, [ebp + 12] ; words
+; 	mov ecx, [ebp + 16] ; number_of_words
+
+; clear_array:
+; 	mov edi, [esi]
+; 	mov byte [edi], 0
+; 	add esi, 4
+; 	loop clear_array
+
+
+
+
+
+
+
+
+; 	mov ecx, [ebp + 12] ; number_of_words
+; 	mov esi, [ebp + 8] ; words
+; print_loop:
+;     cmp ecx, 0
+;     jle end_print_loop
+;     dec ecx
+;     mov eax, [esi]
+;     PRINTF32 `Word: %s\n\x0`, eax
+;     add esi, 4
+;     jmp print_loop
+; end_print_loop:

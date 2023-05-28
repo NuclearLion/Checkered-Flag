@@ -23,32 +23,22 @@ section .text
 ;  dupa lungime si apoi lexicografix
 sort:
     enter 0, 0
+	pusha
 
-; 	mov eax, [ebp + 8] ; words
-; 	mov ebx, [ebp + 12] ; number_of_words
-; 	mov ecx, [ebp + 16] ; size
-; 	mov edx, compare_func
+	mov eax, [ebp + 8] ; words
+	mov ebx, [ebp + 12] ; number_of_words
+	mov ecx, [ebp + 16] ; size
+	mov edx, compare_func
 
-; 	push edx
-; 	push ecx
-; 	push ebx
-; 	push eax
+	push edx
+	push ecx
+	push ebx
+	push eax
 
-; 	call qsort
-; 	add esp, 16
+	call qsort
+	add esp, 16
 
-; 	mov ecx, [ebp + 12] ; number_of_words
-; 	mov esi, [ebp + 8] ; words
-; print_loop:
-;     cmp ecx, 0
-;     jle end_print_loop
-;     dec ecx
-;     mov eax, [esi]
-;     PRINTF32 `Word: %s\n\x0`, eax
-;     add esi, 4
-;     jmp print_loop
-; end_print_loop:
-
+	popa
     leave
     ret
 
@@ -58,15 +48,6 @@ sort:
 get_words:
     enter 0, 0
 	pusha
-
-; 	mov esi, [ebp + 12] ; words
-; 	mov ecx, [ebp + 16] ; number_of_words
-
-; clear_array:
-; 	mov edi, [esi]
-; 	mov byte [edi], 0
-; 	add esi, 4
-; 	loop clear_array
 
 	mov edi, [ebp + 8] ; s
 	mov esi, [ebp + 12] ; words
@@ -109,10 +90,17 @@ end_process_tokens:
     ret
 
 compare_func:
-	push ebp
-	mov ebp, esp
+	; push ebp
+	; mov ebp, esp
+	enter 0, 0
 	pusha
+	; push edi
+	; push esi
+	; push edx
+	; push ecx
+	; push ebx
 
+	xor eax, eax
 	; load string pointers
 	mov eax, [ebp + 8] ; a
 	mov ebx, [ebp + 12] ; b
@@ -124,7 +112,7 @@ compare_func:
 	mov ecx, eax
 
 	; get len of strB
-	push eax
+	push ebx
 	call strlen
 	add esp, 4
 	mov edx, eax
@@ -135,19 +123,18 @@ compare_func:
 	jl lenB_greater
 
 	; lenA == lenB, cmp lexicographically
-	mov eax, [ebp + 8] ; a
-	mov eax, [eax]
+	push ebx
 	push eax
-
-	mov eax, [ebp + 12] ; b
-	mov eax, [eax]
-	push eax
-
 	call strcmp
 	add esp, 8
 
 	; restore stack and return
 end_compare:
+	; pop ebx
+	; pop ecx
+	; pop edx
+	; pop esi
+	; pop edi
 	popa
 	leave
 	ret
