@@ -1,5 +1,4 @@
 ; Copyrigth (c) 2023, <Dan-Dominic Staicu>
-%include "../include/io.mac"
 
 section .data
 	back db "..", 0
@@ -11,7 +10,6 @@ section .data
 section .text
 	global pwd
 	extern strcat
-	extern printf
 	extern strlen
 	extern strcmp
 
@@ -29,64 +27,57 @@ pwd:
 	
 
 loop_words:
-	; check if the word is ".."
-	; PRINTF32 `edi at start of each loop: %s\n\x0`, [edi]
 	push ecx
-check_back:
+check_back: ; check if the word is ".."
 	xor edx, edx
 	mov edx, back
-	push dword [edi]
+	push dword [edi] ; directory
 	push edx
-	call strcmp
+	call strcmp ; strcmp(edi, "..")
 	add esp, 8
 
-	cmp eax, 0
-	jne check_curr
+	cmp eax, 0 ; check if edi is ".."
+	jne check_curr ; if it is not, check if it is "."
 	cmp dword [cnt_out], 0 ; check if it has what folder to remove
 	jle next_word
 	; if it is, remove the last folder from the path
 
-	; TODO: remove the last folder from the path and last slash
-	mov ebx, esi
+	mov ebx, esi ; ebx = esi = output
 
-find_slash:
+find_slash: ; find the last character in the string
 	inc ebx ; move to the next char
 	cmp byte [ebx], 0 ; check if it is the end of the string
-	jne find_slash
+	jne find_slash ; if it is not, loop
 
-overwrite_slash:
+overwrite_slash: ; go back until it finds the last slash
 	dec ebx ; move back in the string
 	cmp byte [ebx], '/' ; check if it is a slash
-	jne overwrite_slash
+	jne overwrite_slash ; if it is not, loop
 	mov byte [ebx], 0 ; overwrite the slash with 0
 
 	dec dword [cnt_out] ; decrement the count of folders in the output
 
-	jmp next_word
+	jmp next_word ; go to the next word in the matrix
 check_curr:
 	xor edx, edx
 	mov edx, curr
 	push dword [edi]
 	push edx
-	call strcmp
+	call strcmp ; strcmp(edi, ".")
 	add esp, 8
 
-	cmp eax, 0
-	jne add_word
+	cmp eax, 0 ; check if edi is "."
+	jne add_word ; if not, add it to the output
 
-	; if it is, do nothing
-	jmp next_word
+	jmp next_word ; if it is, do nothing and go to the next word
 add_word:
 	; concatenate slash in the output
 	xor edx, edx
 	mov edx, slash
-	push edx
+	push edx ; src
 	push esi ; dest
-	call strcat
+	call strcat ; strcat(esi, "/")
 	add esp, 8
-
-	; PRINTF32 `esi in add_word: %s\n\x0`, esi
-	; PRINTF32 `edi in add_word: %s\n\x0`, [edi]
 
 	; inc count of folders in the output
 	inc dword [cnt_out]
@@ -94,10 +85,8 @@ add_word:
 	; concatenate the word in the output
 	push dword [edi] ; src
 	push esi ; dest
-	call strcat
+	call strcat ; strcat(esi, edi)
 	add esp, 8
-
-	; PRINTF32 `esi after add: %s\n\x0`, [esi]
 
 next_word:
 	xor eax, eax
@@ -107,20 +96,17 @@ next_word:
 	add esp, 4
 
 	add edi, 4 ; move to the next word
-	; PRINTF32 `edi: %s\n\x0`, edi
 
 	pop ecx ; get the count of words in given matrix
-	; PRINTF32 `ecx %d\n\x0`, ecx
 	dec ecx ; decrement the count of words
 	jnz loop_words ; if there are more words, loop
 
-	; PRINTF32 `esi at end: %s\n\x0`, esi
 	; place the last slash
 	xor edx, edx
 	mov edx, slash
-	push edx
+	push edx ; src
 	push esi ; dest
-	call strcat
+	call strcat ; strcat(esi, "/")
 	add esp, 8
 
 	popa
