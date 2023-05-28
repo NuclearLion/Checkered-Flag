@@ -1,3 +1,4 @@
+
 %include "../include/io.mac"
 
 global get_words
@@ -8,16 +9,84 @@ section .data
 	delimiters db ' ,.', 10, 0
 	endl db 10, 0
 	word_cnt dd 0
-;;;debug zone;;;
-	format db "%s", 0
 
 section .text
 	extern strtok
-	extern printf
-	extern strcat
-	extern qsort
 	extern strlen
 	extern strcmp
+	extern qsort
+	extern printf
+
+compare_func:
+    ; save used registers
+	push ebp
+	mov ebp, esp
+	
+	push ebx
+	push ecx
+	push edx
+
+	mov eax, [ebp + 8] ; a
+	mov ebx, [ebp + 12] ; b
+
+	mov eax, [eax]
+	mov ebx, [ebx]
+
+	push eax
+	call strlen
+	add esp, 4
+	push eax ; save lenA on stack
+
+	push ebx
+	call strlen
+	add esp, 4
+	push eax; save lenB on stack
+
+	pop edx ; lenB
+	pop ecx ; lenA
+
+	cmp ecx, edx ; compare lengths
+	jg lenA_greater
+	jl lenB_greater
+
+	; lenA == lenB, cmp lexicographically
+	mov eax, [ebp + 8] ; a
+	mov ebx, [ebp + 12] ; b
+
+	mov eax, [eax]
+	mov ebx, [ebx]
+
+	push ebx ; b
+	push eax ; a
+	call strcmp ; strcmp(a, b)
+	add esp, 8
+
+	cmp eax, 0 ; ? strcmp(a, b) == 0
+	jg lenA_greater ; a > b => return 1
+	jl lenB_greater ; a < b => return -1
+
+	; a == b
+	mov eax, 0
+
+	jmp end_compare
+
+lenA_greater:
+	mov eax, 1
+	jmp end_compare
+
+lenB_greater:
+	mov eax, -1
+	jmp end_compare
+
+end_compare:
+	pop edx
+	pop ecx
+	pop ebx
+	leave
+	ret
+
+
+
 ;; sort(char **words, int number_of_words, int size)
 ;  functia va trebui sa apeleze qsort pentru soratrea cuvintelor 
 ;  dupa lungime si apoi lexicografix
@@ -28,19 +97,24 @@ sort:
 	mov eax, [ebp + 8] ; words
 	mov ebx, [ebp + 12] ; number_of_words
 	mov ecx, [ebp + 16] ; size
-	mov edx, compare_func
+	mov edx, compare_func ; compare_func
 
-	push edx
-	push ecx
-	push ebx
-	push eax
+	push edx ; compare_func
+	push ecx ; size
+	push ebx ; number_of_words
+	push eax ; words
 
 	call qsort
 	add esp, 16
 
+	mov eax, esi
+
+	; PRINTF32 `Sorted words: %s\n\x0`, dword [eax]
+
 	popa
     leave
     ret
+
 
 ;; get_words(char *s, char **words, int number_of_words)
 ;  separa stringul s in cuvinte si salveaza cuvintele in words
@@ -88,62 +162,3 @@ end_process_tokens:
 	popa
     leave
     ret
-
-compare_func:
-	; push ebp
-	; mov ebp, esp
-	enter 0, 0
-	pusha
-	; push edi
-	; push esi
-	; push edx
-	; push ecx
-	; push ebx
-
-	xor eax, eax
-	; load string pointers
-	mov eax, [ebp + 8] ; a
-	mov ebx, [ebp + 12] ; b
-
-	; get len of strA
-	push eax
-	call strlen
-	add esp, 4
-	mov ecx, eax
-
-	; get len of strB
-	push ebx
-	call strlen
-	add esp, 4
-	mov edx, eax
-
-	; compare lenA and lenB
-	cmp ecx, edx
-	jg lenA_greater
-	jl lenB_greater
-
-	; lenA == lenB, cmp lexicographically
-	push ebx
-	push eax
-	call strcmp
-	add esp, 8
-
-	; restore stack and return
-end_compare:
-	; pop ebx
-	; pop ecx
-	; pop edx
-	; pop esi
-	; pop edi
-	popa
-	leave
-	ret
-
-lenA_greater:
-	mov eax, 1
-	jmp end_compare
-
-lenB_greater:
-	mov eax, -1
-	jmp end_compare
-

@@ -447,7 +447,7 @@ lenB_greater:
 
 
 
-
+%include "../include/io.mac"
 
 
 
@@ -478,3 +478,41 @@ lenB_greater:
 ;     add esi, 4
 ;     jmp print_loop
 ; end_print_loop:
+
+
+
+
+int compare(const void* a, const void* b) {
+    char* strA = *(char**)a;
+    char* strB = *(char**)b;
+
+    int lenA = strlen(strA);
+    int lenB = strlen(strB);
+
+    if (lenA < lenB) return -1;
+    else if (lenA > lenB) return 1;
+    else return strcmp(strA, strB);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+pere de 32 si mere de 27 are Ana 
