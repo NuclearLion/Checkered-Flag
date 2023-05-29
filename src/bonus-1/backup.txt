@@ -1,0 +1,40 @@
+push rbx
+	push r12
+	push r13
+	push r14
+
+	mov r12, rdi ; v1
+	mov ecx, esi ; n1
+	mov r13, rdx ; v2
+	mov ebx, r10d ; n2
+	mov r14, r8  ; v
+
+loop_arrays:
+	cmp ecx, 0 ; compare n1 with 0
+	je check_second_array ; if n1 == 0, jump to check_second_array
+
+	mov eax, [r12] ; eax = v1[0]
+	mov [r14], eax ; v[0] = v1[0]
+	add r12, 4 ; v1++
+	add r14, 4 ; v++
+	dec ecx ; n1--
+
+check_second_array:
+	cmp ebx, 0 ; compare n2 with 0
+	je end ; if n2 == 0, jump to end
+
+	mov eax, [r13] ; eax = v2[0]
+	mov [r14], eax ; v[0] = v2[0]
+	add r13, 4 ; v2++
+	add r14, 4 ; v++
+	dec ebx ; n2--
+
+	jmp loop_arrays ; jump to loop_arrays
+
+end:
+
+	pop r14
+	pop r13
+	pop r12
+	pop rbx
+	pop rbp
