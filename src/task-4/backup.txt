@@ -1,0 +1,21 @@
+	; PRINTF32 `array_idx_1 before segfault = %d\n\x0`, ecx
+	; PRINTF32 `ebx before segfault = %d\n\x0`, ebx
+	; PRINTF32 `EDX before add in array = %d\n\x0`, edi
+
+
+		; PRINTF32 `AT START node = %d\n\x0`, eax
+	; PRINTF32 `AT START array_idx_1 = %d\n\x0`, ebx
+
+
+
+		; PRINTF32 `AT MIDDLE node = %d\n\x0`, eax
+
+
+
+			; PRINTF32 `EDI before mul = %d\n\x0`, edi
+
+
+	; PRINTF32 `AT MIDDLE node = %d\n\x0`, eax
+
+	; PRINTF32 `array_idx_1 after segfault = %d\n\x0`, [array_idx_1]
+	; PRINTF32 `node value= %d\n\x0`, edi

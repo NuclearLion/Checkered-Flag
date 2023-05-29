@@ -174,7 +174,7 @@ void compute_feedback(int len, int *array, char *function_name, int value)
                 delim + (26 - sz), function_name, delim + (26 - sz));
                 
         float score_indiv = 0.0;
-        for (int i = 0; i < NR_TASKS; ++i) {
+        for (int i = 0; i < NR_TASKS; ++i) { //TODO i = 0; i < NR_TASKS; ++i
             printf("Test %d %s ", i, filler + 21);
             if (array[i] == 1) {
                 score_indiv += 1.0 * value / NR_TASKS;
@@ -229,7 +229,7 @@ void run_tests(int task_type)
     memset(results_2, -1, sizeof(results_2));
     memset(results_3, -1, sizeof(results_3));
 
-    for (int i = 0; i < NR_TASKS; ++i) {
+    for (int i = 0; i < NR_TASKS; ++i) { //TODO i = 0; i < NR_TASKS;
         memset(array_in, 0, LEN * sizeof(*array_in));
         memset(array_ref_parc, 0, LEN * sizeof(*array_ref_parc));
         memset(array_ref_intruders, 0, LEN * sizeof(*array_ref_intruders));
