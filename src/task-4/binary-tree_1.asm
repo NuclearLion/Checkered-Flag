@@ -11,8 +11,7 @@ endstruc
 section .data
 
 section .text
-    global inorder_parc
-	extern printf
+    global inorder_parc	
 
 ;   struct node {
 ;       int value;
