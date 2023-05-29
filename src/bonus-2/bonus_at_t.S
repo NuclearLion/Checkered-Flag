@@ -12,22 +12,20 @@
 # newPos = ((oldPos - 1) * newRange / oldRange) + 1
 .macro SCALE_POSITION_MACRO position
 	movl \position, %eax
-	subl $1, %eax
 	mull %edx
-	movl $9, %ecx
-	xorl %edx, %edx
+	movl $10, %ecx
 	divl %ecx
-	addl $1, %eax
 	movl 16(%ebp), %edx # n
 .endm
 
 
- .macro SUBSTRACT_MACRO value
- 	movl 20(%ebp), %ebx
-	imull $4, %eax
- 	addl %eax, %ebx
- 	subl \value, (%ebx)
- .endm
+.macro SUBSTRACT_MACRO value
+	movl 20(%ebp), %ebx
+	mov $4, %ecx
+	mull %ecx
+	addl %eax, %ebx
+	subl \value, (%ebx)
+.endm
 
 
 .section .text
