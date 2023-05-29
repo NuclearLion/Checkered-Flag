@@ -1,4 +1,5 @@
 ; Copyrigth (c) 2023, <Dan-Dominic Staicu>
+
 extern array_idx_2      ;; int array_idx_2
 
 struc node
@@ -51,7 +52,7 @@ inorder_intruders:
 	je end
 
 left:
-	mov ecx, eax ; the next parrent is the current node
+	mov ecx, eax ; the next parent is the current node
 	mov eax, [eax + node.left] ; eax = node->left
 
 	push ebx ; push array
@@ -64,7 +65,7 @@ check_left:
 	mov eax, [ebp + 8] ; node
 	mov ecx, [ebp + 12] ; parent
 
-	mov ecx, eax ; the next parrent is the current node
+	mov ecx, eax ; the next parent is the current node
 	mov eax, [eax + node.left] ; eax = node->left
 
 	cmp eax, 0 ; if node->left == NULL
