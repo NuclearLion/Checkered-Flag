@@ -1,0 +1,44 @@
+loop:
+	ADD_VECTORS
+	addl $1, %ecx
+	cmpl %ecx, %edx
+	jne loop
+
+	SUB_VALUE FIRST_VALUE, FIRST_POSITION
+	SUB_VALUE SECOND_VALUE, SECOND_POSITION
+	SUB_VALUE THIRD_VALUE, THIRD_POSITION
+
+	popl %ebx
+	popl %esi
+	popl %edi
+
+
+
+.macro ADD_VECTORS
+	movl (%esi, %ecx, 4), %eax
+	addl (%edi, %ecx, 4), %eax
+	movl %eax, (%ebx, %ecx, 4)
+.endm
+
+.macro SUB_VALUE value, position
+	movl $(value), %eax
+	subl %eax, ($(position) * %edx, %ebx, 4)
+.endm
+
+
+	# v1 is in %rdi
+	# v2 is in %rsi
+	# n is in %rdx
+	# v is in %rcx
+
+
+
+
+
+	# addl %eax, (%ebx)
+
+	# addl $4, %ebx
+	# addl $4, %esi
+	# addl $4, %edi
+
+	
