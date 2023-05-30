@@ -1,0 +1,147 @@
+section .rodata:
+	; taken from fnctl.h
+	O_RDONLY	equ 00000
+	O_WRONLY	equ 00001
+	O_TRUNC		equ 01000
+	O_CREAT		equ 00100
+	S_IRUSR		equ 00400
+	S_IRGRP		equ 00040
+	S_IROTH		equ 00004
+
+section .bss
+	buffer resb 100
+	open_mode equ 0
+
+section .data
+	Marco db "Marco", 0
+	Polo db "Polo", 0
+
+section .text
+	global	replace_marco
+
+;; void replace_marco(const char *in_file_name, const char *out_file_name)
+;  it replaces all occurences of the word "Marco" with the word "Polo",
+;  using system calls to open, read, write and close files.
+
+replace_marco:
+	push	ebp
+	mov 	ebp, esp
+
+	push eax
+	push ebx
+	push ecx
+	push edx
+
+	mov eax, 5
+	mov ebx, [ebp + 8] ; input file name
+	mov ecx, O_RDONLY
+	mov edx, open_mode
+	int 0x80
+
+	cmp eax, 0
+	jl error
+
+	mov ebx, eax
+	mov eax, 3
+	mov ecx, buffer
+	mov edx, 100
+	int 0x80
+
+
+	mov eax, 6
+	int 0x80
+
+	mov eax, buffer
+
+replace:
+	cmp byte [eax], 0
+	je end_replace
+
+	cmp dword [eax], Marco
+	jne skip
+
+	mov dword [eax], Polo
+
+skip:
+	inc eax
+	jmp replace
+
+end_replace:
+	mov eax, 5 
+	mov ebx, [ebp + 12]
+	mov ecx, O_WRONLY | O_CREAT | O_TRUNC
+	mov edx, S_IRUSR | S_IRGRP | S_IROTH
+	int 0x80
+
+	cmp eax, 0
+	jl error
+
+	mov ebx, eax
+	mov eax, 4
+	mov ecx, buffer
+	mov edx, 100
+	int 0x80
+
+	mov eax, 6
+	int 0x80
+
+	pop edx
+	pop ecx
+	pop ebx
+	pop eax
+
+	leave
+	ret
+
+error:
+	ret
+
+
+
+
+
+
+
+; open output file
+	mov eax, 5 ; open system call number is 2
+	mov ebx, [ebp + 12] ; pointer to filename
+	mov ecx, 0102o
+	mov edx, 0777o
+	int 0x80
+
+	mov [fd], eax ; save file descriptor
+
+	mov esi, eax
+
+	; write to file
+	mov eax, 4 ; write system call number is 4
+	mov ebx, [fd]
+	mov ecx, buffer
+	mov edx, esi
+	int 0x80
+
+	mov eax, 6 ; syscall number (sys_close)
+	mov ebx, [fd]
+	int 0x80
+
+
+
+
+	; open the file
+	mov eax, 5 ; syscall for open
+	mov ebx, [ebp + 12] ; pointer to filename
+	mov ecx, 0x201 ; O_CREAT | O_WRONLY | O_TRUNC ; flags
+	int 0x80
+
+	mov ebx, eax
+
+	; write to the file
+	mov eax, 4 ; syscall for write
+	mov ebx, eax ; file descriptor
+	mov ecx, buffer ; pointer to buffer
+	mov edx, 100
+
+	; close the file
+	mov eax, 6 ; syscall for close
+	mov ebx, ebx ; file descriptor
+	int 0x80 ; call the kernel
