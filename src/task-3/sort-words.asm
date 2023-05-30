@@ -1,5 +1,4 @@
-
-%include "../include/io.mac"
+; Copyrigth (c) 2023, <Dan-Dominic Staicu>
 
 global get_words
 global compare_func
@@ -22,6 +21,7 @@ compare_func:
 	push ebp
 	mov ebp, esp
 	
+	; push everything but eax (return value)
 	push ebx
 	push ecx
 	push edx
@@ -79,12 +79,12 @@ lenB_greater:
 	jmp end_compare
 
 end_compare:
+	; pop everything but eax (return value)
 	pop edx
 	pop ecx
 	pop ebx
 	leave
 	ret
-
 
 
 ;; sort(char **words, int number_of_words, int size)
@@ -104,12 +104,8 @@ sort:
 	push ebx ; number_of_words
 	push eax ; words
 
-	call qsort
+	call qsort ; qsort(words, number_of_words, size, compare_func)
 	add esp, 16
-
-	mov eax, esi
-
-	; PRINTF32 `Sorted words: %s\n\x0`, dword [eax]
 
 	popa
     leave

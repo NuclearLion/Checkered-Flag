@@ -20,14 +20,14 @@ section .data
 	Polo db "Polo", 0
 	from_len equ 5 ; strlen(Marco)
 	to_len equ 4 ; strlen(Polo)
-    format db "%s", 0
+	error_msg db 'Error here!', 0
 
 section .text
 	global	replace_marco
-	extern printf
 	extern strstr
 	extern memcpy
 	extern strlen
+	extern printf
 ;; void replace_marco(const char *in_file_name, const char *out_file_name)
 ;  it replaces all occurences of the word "Marco" with the word "Polo",
 ;  using system calls to open, read, write and close files.
@@ -60,11 +60,6 @@ replace_marco:
 	mov eax, buffer ; src
 	mov edi, Marco ; to replace
 	mov esi, Polo ; replace with
-
-	; push buffer
-	; push format
-	; call printf
-	; add esp, 8
 
 replace:
 	mov eax, buffer ; src
@@ -103,13 +98,6 @@ done:
 	call strlen
 	add esp, 4
 
-	push buffer
-	push format
-	call printf
-	add esp, 8
-
-
-
 ; open output file
 	mov eax, 5 ; open system call number is 2
 	mov ebx, [ebp + 12] ; pointer to filename
@@ -123,15 +111,15 @@ done:
 
 	xor esi, esi
 	push buffer
-	call strlen
+	call strlen ; strlen(buffer)
 	add esp, 4
-	mov esi, eax
+	mov esi, eax ; esi = strlen(buffer)
 
 	; write to file
 	mov eax, 4 ; write system call number is 4
 	mov ebx, [fd]
 	mov ecx, buffer
-	mov edx, esi ; maybe strlen of buffer?
+	mov edx, esi ; strlen of buffer
 	int 0x80
 
 	mov eax, 6 ; syscall number (sys_close)
@@ -143,6 +131,8 @@ done:
 	ret
 
 error:
-	PRINTF32 `in error ffs u dumb shit\n\x0`
+	push error_msg
+	call printf
+	add esp, 4
 	leave
 	ret

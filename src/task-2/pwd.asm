@@ -24,7 +24,6 @@ pwd:
 	mov ecx, [ebp + 12] ; ecx = n
 	mov esi, [ebp + 16] ; esi = output
 
-	
 
 loop_words:
 	push ecx

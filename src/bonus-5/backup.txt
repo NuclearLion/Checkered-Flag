@@ -1,0 +1,25 @@
+; calculate x * sqrt(2)
+	fld dword [ebp + 8]	; x
+	fmul dword [_sqrt2]	; x * sqrt(2)
+
+	; calculate sin(z * PI / e)
+	fld dword [ebp + 12]	; z
+
+	fldpi ; load PI
+	fmul ; z * PI
+
+	fld1 ; load 1 in stack
+	fldl2e ; load log2(e) in stack
+	fdiv ; divide 1 to log2(e) (1 / log2(e)) to get e
+	fdiv ; divide z * PI to e (z * PI / e)
+
+	fsin ; calculate sin(z * PI / e)) 
+
+	fld dword [ebp + 4]	; y
+	fmul ; y * sin(z * PI / e)
+
+	fadd ; x * sqrt(2) + y * sin(z * PI / e)
+
+leave
+
+	fstp dword [ebp] ; return value
