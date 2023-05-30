@@ -23,3 +23,96 @@
 leave
 
 	fstp dword [ebp] ; return value
+
+
+
+
+
+
+
+sub esp, 8
+	fstp qword [esp]
+	push format
+	call printf
+	add esp, 12
+
+
+
+
+
+	fldl2e ; log2(e)
+	f2xm1 ; 2^log2(e) - 1 = e - 1
+	fld1 ; push 1
+	fadd ; e - 1 + 1 = e
+
+
+
+
+
+	; fld1 ; push 1
+	; fldl2e ; push log2(e)
+	; fsubr ; subtract to get log base e of 1 (which is 0) on the FPU stack
+	; fyl2x ; 2^0 = 1
+
+	; get e
+	; fldl2e
+	; fscale
+
+
+
+		; sub esp, 8
+	; fstp qword [esp]
+	; push format
+	; call printf
+	; add esp, 12
+	; fld1
+
+
+
+
+		; sub esp, 8
+	; fstp qword [esp]
+	; push format
+	; call printf
+	; add esp, 12
+
+
+
+; fld1
+	; fldl2e ; log2(e)
+	; f2xm1 ; 2^log2(e) - 1 = e - 1
+	; fld1 ; push 1
+	; fadd ; e - 1 + 1 = e
+
+	; fdiv ; 1/e
+
+	; 1 / e
+
+	; fld1
+	; fld1 ; 1
+	; fldl2e ; log2 e
+	; f2xm1 ; 2 ^ log2(e) - 1
+	; fadd 
+	; ; fld1
+	; fdiv
+
+	; fld1             ; load 1.0 onto the FPU stack
+    ; fldl2e           ; load log2(e) onto the FPU stack
+    ; f2xm1            ; calculate 2^x - 1 and replace x with the result
+    ; fadd st0, st0    ; double the result (to account for 2^x - 1)
+    ; fadd st0, st0    ; double the result again (since the '2' in 2^x is now 1 due to the previous fadd)
+    ; fadd st0, st1    ; add st0 and st1 (which is 1.0), replacing st0 with the result, which is now e
+    ; fxch st1         ; swap st0 and st1. Now st0 has 1.0 and st1 has e
+    ; fdiv st1, st0    ; divide st0 by st1, replacing st0 with the result, which is 1/e
+
+
+	; fld1
+	; fld1
+	; fldl2e
+	; fdiv st0, st1
+	; f2xm1
+	; fadd st0, st1
+	; fxch st1
+	; fdiv st1, st0
+
+	
